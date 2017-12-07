@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: A random hello world example.
+Resources:
+  LambdaPermission:
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+        - PassMessage
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceAccount:
+        Ref: AWS::AccountId
+    Type: AWS::Lambda::Permission
+  MyGetMethod:
+    Properties:
+      ApiKeyRequired: false
+      AuthorizationType: NONE
+      HttpMethod: GET
+      Integration:
+        IntegrationHttpMethod: GET
+        IntegrationResponses:
+        - StatusCode: 200
+        Type: AWS_PROXY
+        Uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PassMessage.Arn}/invocations
+      MethodResponses:
+      - ResponseModels:
+          application/json: Empty
+        StatusCode: 200
+      ResourceId:
+        Ref: MyGetResource
+      RestApiId:
+        Ref: MyApiGateway
+    Type: AWS::ApiGateway::Method
+  PassMessage:
+    Properties:
+      CodeUri: s3://paolo-hello-world/971b89193221412ea22d1c99b08846fa
+      Description: Passes a message to the server
+      Events:
+        PassMessage:
+          Properties:
+            Method: any
+            Path: /message
+          Type: Api
+      Handler: index.handler
+      Runtime: nodejs6.10
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

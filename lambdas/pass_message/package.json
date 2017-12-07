@@ -1,0 +1,11 @@
+{
+  "name": "save_message",
+  "version": "0.0.1",
+  "description": "Lambda function for saving textual messages.",
+  "main": "index.js",
+  "author": "Paolo Longato",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.122.0"
+  },
+}
