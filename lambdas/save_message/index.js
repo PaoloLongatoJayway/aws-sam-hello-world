@@ -11,8 +11,9 @@ exports.handler = function(event, context, callback) {
         case 'POST': {
             const message = parseEvent(event);
             console.console.log(message);
-            const resp = response.ok(message);
-            return callback(null, resp);
+            //const resp = response.ok(message);
+            //return callback(null, resp);
+            context.succed(message);
         }
 
         default: {
