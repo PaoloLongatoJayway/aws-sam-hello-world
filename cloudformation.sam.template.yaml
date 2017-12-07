@@ -17,36 +17,3 @@ Resources:
           Properties:
             Method: any
             Path: /message
-
-  LambdaPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt
-        - PassMessage
-        - Arn
-      Action: lambda:InvokeFunction
-      Principal: apigateway.amazonaws.com
-      SourceAccount: !Ref 'AWS::AccountId'
-
-  MyGetMethod:
-    Type: "AWS::ApiGateway::Method"
-    Properties:
-      ApiKeyRequired: false
-      AuthorizationType: NONE
-      HttpMethod: GET
-      Integration:
-        IntegrationHttpMethod: GET
-        IntegrationResponses:
-          -
-            StatusCode: 200
-        Type: AWS_PROXY
-        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PassMessage.Arn}/invocations
-      MethodResponses:
-        -
-          StatusCode: 200
-          ResponseModels:
-            application/json: Empty
-      ResourceId:
-        Ref: MyGetResource
-      RestApiId:
-        Ref: MyApiGateway
